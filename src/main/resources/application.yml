@@ -7,7 +7,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-      dialect: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
     show-sql: false
   sql:
     init:
@@ -30,5 +32,3 @@ logging:
 
 secret:
   key: 1bca93957cba46b0e41f028c907ccdae668a6e16b57e2bda87f9c7af4b6bb133
-
-

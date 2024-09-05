@@ -62,7 +62,7 @@ public class BookServiceImpl implements BookService {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-        return  bookRepository.findAll(specification, pageable)
+        return  bookRepository.findAllByIsEnabledTrue(specification, pageable)
                               .map(bookMapper::entityToDto);
     }
 

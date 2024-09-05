@@ -57,9 +57,8 @@ VALUES ('bookTitle1', 10, NOW(), 1, 1, NOW(), NOW()),
        ('bookTitle5', 50, NOW(), 5, 5, NOW(), NOW());
 
 INSERT INTO reviews (rating, comment, review_date, book_id, created_at, updated_at)
-VALUES
-    (1, 'reviewComment1', NOW(), 1, NOW(), NOW()),
-    (2, 'reviewComment2', NOW(), 2, NOW(), NOW()),
-    (3, 'reviewComment3', NOW(), 3, NOW(), NOW()),
-    (4, 'reviewComment4', NOW(), 4, NOW(), NOW()),
-    (5, 'reviewComment5', NOW(), 5, NOW(), NOW());
+VALUES (1, 'reviewComment1', NOW(), 1, NOW(), NOW()),
+       (2, 'reviewComment2', NOW(), 2, NOW(), NOW()),
+       (3, 'reviewComment3', NOW(), 3, NOW(), NOW()),
+       (4, 'reviewComment4', NOW(), 4, NOW(), NOW()),
+       (5, 'reviewComment5', NOW(), 5, NOW(), NOW());

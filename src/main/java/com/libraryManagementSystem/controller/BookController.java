@@ -49,7 +49,7 @@ public class BookController {
                                                     @RequestParam(required = false) String title,
                                                     @PathVariable int pageNumber,
                                                     @PathVariable int pageSize) {
-        Page<BookDto> response = bookService.bookFilter(publishingHouseId, authorIds, genreIds, title, pageSize, pageNumber);
+        Page<BookDto> response = bookService.bookFilter(publishingHouseId, authorIds, genreIds, title, pageNumber, pageSize);
         return ResponseEntity.ok(response);
     }
 
