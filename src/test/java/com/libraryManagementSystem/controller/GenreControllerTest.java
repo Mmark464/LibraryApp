@@ -61,7 +61,7 @@ public class GenreControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void saveGenre() throws Exception {
         when(genreService.saveGenre(genreRequest)).thenReturn(genreDto);
 
@@ -86,13 +86,10 @@ public class GenreControllerTest {
         List<GenreDto> genreDtoList = Arrays.asList(genreDto, genreDto2);
         Page<GenreDto> genreDtoPage = new PageImpl<>(genreDtoList, pageable, genreDtoList.size());
 
-        when(genreService.getAllGenres(any(int.class), any(int.class), any(String[].class))).thenReturn(genreDtoPage);
+        when(genreService.getAllGenres(any(int.class), any(int.class))).thenReturn(genreDtoPage);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/genre")
-                        .param("pageNumber", String.valueOf(pageNumber))
-                        .param("pageSize", String.valueOf(pageSize))
-                        .param("pageSort", pageSort)
+                        .get("/api/v1/genre/" + pageNumber + "/" + pageSize)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -118,7 +115,7 @@ public class GenreControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void updateGenre() throws Exception {
         when(genreService.updateGenre(genreDto)).thenReturn(genreDto2);
 
@@ -133,7 +130,7 @@ public class GenreControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void deleteGenre() throws Exception {
         doNothing().when(genreService).deleteGenre(id);
 

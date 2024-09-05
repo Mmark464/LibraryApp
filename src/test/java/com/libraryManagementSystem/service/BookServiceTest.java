@@ -39,7 +39,6 @@ public class BookServiceTest {
     private final Long id = 1L;
     private final int pageSize = 10;
     private final int pageNumber = 0;
-    private final String[] pageSort = {"id", "asc"};
     private BookRequest bookRequest;
     private Book book;
     private BookDto bookDto;
@@ -88,14 +87,14 @@ public class BookServiceTest {
         bookDto2.setId(id + 1);
         bookDto2.setTitle(bookRequest.getTitle() + "2");
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(pageSort));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Book> bookPage = new PageImpl<>(books, pageable, books.size());
 
         when(bookRepository.findAllByIsEnabledTrue(pageable)).thenReturn(bookPage);
         when(bookMapper.entityToDto(book)).thenReturn(bookDto);
         when(bookMapper.entityToDto(book2)).thenReturn(bookDto2);
 
-        Page<BookDto> result = bookService.getAllBooks(pageSize, pageNumber, pageSort);
+        Page<BookDto> result = bookService.getAllBooks(pageNumber, pageSize);
 
         assertNotNull(result);
         assertEquals(bookDto, result.getContent().getFirst());
@@ -133,7 +132,7 @@ public class BookServiceTest {
         when(bookRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(bookPage);
         when(bookMapper.entityToDto(book)).thenReturn(bookDto);
 
-        Page<BookDto> result = bookService.bookFilter(id, authorIds, genreIds, title, pageSize, pageNumber, pageSort);
+        Page<BookDto> result = bookService.bookFilter(id, authorIds, genreIds, title, pageNumber, pageSize);
 
         assertEquals(bookDto, result.getContent().getFirst());
     }

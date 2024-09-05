@@ -61,7 +61,7 @@ public class PublishingHouseControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void savePublishingHouse() throws Exception {
         when(publishingHouseService.savePublishingHouse(publishingHouseRequest)).thenReturn(publishingHouseDto);
 
@@ -86,13 +86,10 @@ public class PublishingHouseControllerTest {
         List<PublishingHouseDto> publishingHouseDtoList = Arrays.asList(publishingHouseDto, publishingHouseDto2);
         Page<PublishingHouseDto> publishingHouseDtoPage = new PageImpl<>(publishingHouseDtoList, pageable, publishingHouseDtoList.size());
 
-        when(publishingHouseService.getAllPublishingHouses(any(int.class), any(int.class), any(String[].class))).thenReturn(publishingHouseDtoPage);
+        when(publishingHouseService.getAllPublishingHouses(any(int.class), any(int.class))).thenReturn(publishingHouseDtoPage);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/publishing-house")
-                        .param("pageNumber", String.valueOf(pageNumber))
-                        .param("pageSize", String.valueOf(pageSize))
-                        .param("pageSort", pageSort)
+                        .get("/api/v1/publishing-house/" + pageNumber + "/" + pageSize)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -118,7 +115,7 @@ public class PublishingHouseControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void updatePublishingHouse() throws Exception {
         when(publishingHouseService.updatePublishingHouse(publishingHouseDto)).thenReturn(publishingHouseDto2);
 
@@ -133,7 +130,7 @@ public class PublishingHouseControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void deletePublishingHouse() throws Exception {
         doNothing().when(publishingHouseService).deletePublishingHouse(id);
 

@@ -86,12 +86,10 @@ public class ReviewControllerTest {
         List<ReviewDto> reviewDtoList = Arrays.asList(reviewDto, reviewDto2);
         Page<ReviewDto> reviewDtoPage = new PageImpl<>(reviewDtoList, pageable, reviewDtoList.size());
 
-        when(reviewService.getAllReviews(any(int.class), any(int.class), any(String[].class))).thenReturn(reviewDtoPage);
+        when(reviewService.getAllReviews(any(int.class), any(int.class))).thenReturn(reviewDtoPage);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/review")
-                        .param("pageNumber", String.valueOf(pageNumber))
-                        .param("pageSize", String.valueOf(pageSize))
+                        .get("/api/v1/review/" + pageNumber + "/" + pageSize)
                         .param("pageSort", pageSort)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

@@ -70,15 +70,14 @@ public class ReviewServiceTest {
 
         int pageSize = 10;
         int pageNumber = 0;
-        String[] pageSort = {"id", "asc"};
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(pageSort));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Review> reviewPage = new PageImpl<>(reviews, pageable, reviews.size());
 
         when(reviewRepository.findAllByIsEnabledTrue(pageable)).thenReturn(reviewPage);
         when(reviewMapper.entityToDto(review)).thenReturn(reviewDto);
         when(reviewMapper.entityToDto(review2)).thenReturn(reviewDto2);
 
-        Page<ReviewDto> result = reviewService.getAllReviews(pageSize, pageNumber, pageSort);
+        Page<ReviewDto> result = reviewService.getAllReviews(pageNumber, pageSize);
 
         assertEquals(reviewDto, result.getContent().getFirst());
         assertEquals(reviewDto2, result.getContent().getLast());

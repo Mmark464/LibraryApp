@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.*;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -67,13 +66,10 @@ public class UserControllerTest {
         List<UserDto> userDtoList = Arrays.asList(userDto, userDto2);
         Page<UserDto> userDtoPage = new PageImpl<>(userDtoList, pageable, userDtoList.size());
 
-        when(userService.getAllUsers(anyInt(), anyInt(), any(String[].class))).thenReturn(userDtoPage);
+        when(userService.getAllUsers(anyInt(), anyInt())).thenReturn(userDtoPage);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/user")
-                        .param("pageNumber", String.valueOf(pageNumber))
-                        .param("pageSize", String.valueOf(pageSize))
-                        .param("pageSort", pageSort)
+                        .get("/api/v1/user/" + pageNumber + "/" + pageSize)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -99,7 +95,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void updateUser() throws Exception {
         when(userService.updateUser(userDto)).thenReturn(userDto2);
 
@@ -113,7 +109,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void deleteUser() throws Exception {
         doNothing().when(userService).deleteUser(id);
 

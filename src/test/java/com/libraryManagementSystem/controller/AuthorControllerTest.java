@@ -62,7 +62,7 @@ public class AuthorControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void saveAuthor() throws Exception {
         when(authorService.saveAuthor(authorRequest)).thenReturn(authorDto);
 
@@ -86,13 +86,10 @@ public class AuthorControllerTest {
         List<AuthorDto> authorDtoList = Arrays.asList(authorDto, authorDto2);
         Page<AuthorDto> authorDtoPage = new PageImpl<>(authorDtoList, pageable, authorDtoList.size());
 
-        when(authorService.getAllAuthors(any(int.class), any(int.class), any(String[].class))).thenReturn(authorDtoPage);
+        when(authorService.getAllAuthors(any(int.class), any(int.class))).thenReturn(authorDtoPage);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/author")
-                        .param("pageNumber", String.valueOf(pageNumber))
-                        .param("pageSize", String.valueOf(pageSize))
-                        .param("pageSort", pageSort)
+                        .get("/api/v1/author/" + pageNumber + "/" + pageSize)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -119,7 +116,7 @@ public class AuthorControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void updateAuthor() throws Exception {
         when(authorService.updateAuthor(authorDto)).thenReturn(authorDto2);
 
@@ -134,7 +131,7 @@ public class AuthorControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void deleteAuthor() throws Exception {
         doNothing().when(authorService).deleteAuthor(id);
 

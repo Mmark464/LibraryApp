@@ -89,16 +89,15 @@ public class AuthorServiceTest {
 
         int pageSize = 10;
         int pageNumber = 0;
-        String[] pageSort = {"id", "asc"};
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(pageSort));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Author> authorPage = new PageImpl<>(authors, pageable, authors.size());
 
         when(authorRepository.findAllByIsEnabledTrue(pageable)).thenReturn(authorPage);
         when(authorMapper.entityToDto(author)).thenReturn(authorDto);
         when(authorMapper.entityToDto(author2)).thenReturn(authorDto2);
 
-        Page<AuthorDto> result = authorService.getAllAuthors(pageNumber, pageSize, pageSort);
+        Page<AuthorDto> result = authorService.getAllAuthors(pageNumber, pageSize);
 
         assertNotNull(result);
         List<AuthorDto> content = result.getContent();

@@ -70,15 +70,14 @@ public class GenreServiceTest {
 
         int pageSize = 10;
         int pageNumber = 0;
-        String[] pageSort = {"id", "asc"};
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(pageSort));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Genre> genrePage = new PageImpl<>(genres, pageable, genres.size());
 
         when(genreRepository.findAllByIsEnabledTrue(pageable)).thenReturn(genrePage);
         when(genreMapper.entityToDto(genre)).thenReturn(genreDto);
         when(genreMapper.entityToDto(genre2)).thenReturn(genreDto2);
 
-        Page<GenreDto> result = genreService.getAllGenres(pageSize, pageNumber, pageSort);
+        Page<GenreDto> result = genreService.getAllGenres(pageNumber, pageSize);
 
         assertEquals(genreDto, result.getContent().getFirst());
         assertEquals(genreDto2, result.getContent().getLast());

@@ -70,15 +70,14 @@ public class PublishingHouseServiceTest {
 
         int pageSize = 10;
         int pageNumber = 0;
-        String[] pageSort = {"id", "asc"};
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(pageSort));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<PublishingHouse> publishingHousePage = new PageImpl<>(publishingHouses, pageable, publishingHouses.size());
 
         when(publishingHouseRepository.findAllByIsEnabledTrue(pageable)).thenReturn(publishingHousePage);
         when(publishingHouseMapper.entityToDto(publishingHouse)).thenReturn(publishingHouseDto);
         when(publishingHouseMapper.entityToDto(publishingHouse2)).thenReturn(publishingHouseDto2);
 
-        Page<PublishingHouseDto> result = publishingHouseService.getAllPublishingHouses(pageSize, pageNumber, pageSort);
+        Page<PublishingHouseDto> result = publishingHouseService.getAllPublishingHouses(pageNumber, pageSize);
 
         assertEquals(publishingHouseDto, result.getContent().getFirst());
         assertEquals(publishingHouseDto2, result.getContent().getLast());

@@ -91,15 +91,14 @@ public class UserServiceTest {
 
         int pageSize = 10;
         int pageNumber = 0;
-        String[] pageSort = {"id", "asc"};
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(pageSort));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<User> userPage = new PageImpl<>(users, pageable, users.size());
 
         when(userRepository.findAllByIsEnabledTrue(pageable)).thenReturn(userPage);
         when(userMapper.entityToDto(user)).thenReturn(userDto);
         when(userMapper.entityToDto(user2)).thenReturn(userDto2);
 
-        Page<UserDto> result = userService.getAllUsers(pageSize, pageNumber, pageSort);
+        Page<UserDto> result = userService.getAllUsers(pageNumber, pageSize);
 
         assertEquals(userDto, result.getContent().getFirst());
         assertEquals(userDto2, result.getContent().getLast());

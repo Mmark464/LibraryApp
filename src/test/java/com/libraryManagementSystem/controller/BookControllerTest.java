@@ -66,7 +66,7 @@ public class BookControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void saveBook() throws Exception {
         when(bookService.saveBook(bookRequest)).thenReturn(bookDto);
 
@@ -86,13 +86,10 @@ public class BookControllerTest {
         List<BookDto> bookDtoList = Arrays.asList(bookDto, bookDto2);
         Page<BookDto> bookDtoPage = new PageImpl<>(bookDtoList, pageable, bookDtoList.size());
 
-        when(bookService.getAllBooks(any(int.class), any(int.class), any(String[].class))).thenReturn(bookDtoPage);
+        when(bookService.getAllBooks(any(int.class), any(int.class))).thenReturn(bookDtoPage);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/book")
-                        .param("pageNumber", String.valueOf(pageNumber))
-                        .param("pageSize", String.valueOf(pageSize))
-                        .param("pageSort", pageSort)
+                        .get("/api/v1/book/" + pageNumber + "/" + pageSize)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -124,17 +121,14 @@ public class BookControllerTest {
         List<BookDto> bookDtoList = Arrays.asList(bookDto, bookDto2);
         Page<BookDto> bookDtoPage = new PageImpl<>(bookDtoList, pageable, bookDtoList.size());
 
-        when(bookService.bookFilter(any(Long.class), anySet(), anySet(), any(String.class), any(int.class), any(int.class), any(String[].class))).thenReturn(bookDtoPage);
+        when(bookService.bookFilter(any(Long.class), anySet(), anySet(), any(String.class), any(int.class), any(int.class))).thenReturn(bookDtoPage);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/book/filter")
+                        .get("/api/v1/book/filter/" + pageNumber + "/" + pageSize)
                         .param("publishingHouseId", "1")
                         .param("authorIds", "1", "2")
                         .param("genreIds", "1", "2")
                         .param("title", "Book Title")
-                        .param("pageNumber", String.valueOf(pageNumber))
-                        .param("pageSize", String.valueOf(pageSize))
-                        .param("pageSort", pageSort)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -145,7 +139,7 @@ public class BookControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void updateBook() throws Exception {
         when(bookService.updateBook(bookDto)).thenReturn(bookDto2);
 
@@ -160,7 +154,7 @@ public class BookControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void deleteBookById() throws Exception {
         doNothing().when(bookService).deleteBook(id);
 
